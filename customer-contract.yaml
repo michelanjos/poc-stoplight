@@ -115,6 +115,32 @@ paths:
                 _links:
                   self:
                     href: 'https://api.customers.bancobpi.pt/customers?customerType=business'
+              examples:
+                example-1:
+                  value:
+                    customer:
+                      - id: string
+                        kind: string
+                        _links:
+                          self:
+                            href: string
+                        completeName: string
+                        shortName: string
+                        nationalities:
+                          - str
+                        birthDate: '2019-08-24'
+                        type: entrepreneur
+                        accountReady: true
+                    totalItems: 0
+                    currentPage: 0
+                    totalPages: 0
+                    _links:
+                      self:
+                        href: string
+                      next:
+                        href: string
+                      prev:
+                        href: string
         '204':
           description: No content
           content: {}
@@ -1610,10 +1636,9 @@ components:
         - type: object
           properties:
             nationality:
+              type: string
               maxLength: 3
               minLength: 3
-              pattern: '[A-Z]{3}'
-              type: string
               description: 'Nationality of the company [Country Codes - ISO 3166](https://www.iso.org/iso-3166-country-codes.html)'
             accountReady:
               type: boolean
