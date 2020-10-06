@@ -1,0 +1,1954 @@
+openapi: 3.0.1
+info:
+  title: Customer Main API
+  description: This is the BPI API for managing and accessing information for its customers. All the operations have a description of how it works; each one of the attributes also have descriptions of their meanings and allowed values. Enjoy!
+  contact:
+    email: mail@bancobpi.pt
+  version: '1.0'
+servers:
+  - url: 'http://example.com/'
+  - url: 'https://example.com/'
+tags:
+  - name: customers
+paths:
+  /customers:
+    get:
+      tags:
+        - customers
+      summary: List Customer
+      description: 'Returns a list of all customers. You shall to provide at least one filter to reach that resource. You can mix name, taxNumber and just ONE document type.'
+      operationId: findCustomers
+      parameters:
+        - name: pageNumber
+          in: query
+          description: The requested page number
+          schema:
+            type: integer
+            default: 1
+        - name: pageSize
+          in: query
+          description: 'The number of elements required in the page requested. Allowed multiples of ten, until 50. '
+          schema:
+            multipleOf: 10
+            maximum: 50
+            type: integer
+            default: 20
+            enum:
+              - 10
+              - 20
+              - 30
+              - 40
+              - 50
+        - name: customerType
+          in: query
+          description: Type of the customer
+          required: true
+          schema:
+            type: string
+            default: individual
+            enum:
+              - individual
+              - business
+        - name: name
+          in: query
+          description: Short or full name of the customer.
+          schema:
+            type: string
+        - name: taxNumber
+          in: query
+          description: Portuguese tax number value (NIF)
+          schema:
+            type: number
+        - name: documentType
+          in: query
+          description: Type of document.
+          schema:
+            type: string
+            enum:
+              - passport
+              - national-id-card
+              - foreign-id-card
+              - foreign-tax-number
+        - name: documentValue
+          in: query
+          description: Value of document. If documentType was chosen this field must be informed.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer-output-paginated'
+              example:
+                customer:
+                  - completeName: Rodrigo Maria Presto
+                    shortName: Rodrigo Presto
+                    nationalities:
+                      - PRT
+                      - BRA
+                    birthDate: '1999-01-01T00:00:00.000Z'
+                    id: 123456900
+                    kind: api.customers.bancobpi.pt/customers
+                    _links:
+                      self:
+                        href: 'https://api.customers.bancobpi.pt/customers/00123456900'
+                    type: business
+                    accountReady: false
+                  - completeName: silva e silva presto
+                    shortName: 'presto, lda'
+                    nationalities:
+                      - PRT
+                      - BRA
+                    birthDate: '2001-01-01T00:00:00.000Z'
+                    id: 123588786
+                    kind: api.customers.bancobpi.pt/customers
+                    _links:
+                      self:
+                        href: 'https://api.customers.bancobpi.pt/customers/00123588786'
+                    type: business
+                    accountReady: false
+                totalItems: 2
+                currentPage: 1
+                totalPages: 1
+                _links:
+                  self:
+                    href: 'https://api.customers.bancobpi.pt/customers?customerType=business'
+        '204':
+          description: No content
+          content: {}
+        '206':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer-output-paginated'
+              example:
+                customer:
+                  - completeName: Rodrigo Maria Presto
+                    shortName: Rodrigo Presto
+                    nationalities:
+                      - PRT
+                      - BRA
+                    birthDate: '1999-01-01T00:00:00.000Z'
+                    id: 123456900
+                    kind: api.customers.bancobpi.pt/customers
+                    _links:
+                      self:
+                        href: 'https://api.customers.bancobpi.pt/customers/00123456900'
+                    type: business
+                    accountReady: false
+                  - completeName: silva e silva presto
+                    shortName: 'presto, lda'
+                    nationalities:
+                      - PRT
+                      - BRA
+                    birthDate: '2001-01-01T00:00:00.000Z'
+                    id: 123588786
+                    kind: api.customers.bancobpi.pt/customers
+                    _links:
+                      self:
+                        href: 'https://api.customers.bancobpi.pt/customers/00123588786'
+                    type: business
+                    accountReady: false
+                totalItems: 10
+                currentPage: 2
+                totalPages: 5
+                _links:
+                  self:
+                    href: 'https://api.customers.bancobpi.pt/customers?customerType=business&page=2'
+                  next:
+                    href: 'https://api.customers.bancobpi.pt/customers?customerType=business&page=3'
+                  prev:
+                    href: 'https://api.customers.bancobpi.pt/customers?customerType=business&page=1'
+        '403':
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '404':
+          description: Not found error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+      x-absis-operation:
+        type: informational
+        security: 934.findCustomers
+  '/customers/{id}':
+    get:
+      tags:
+        - customers
+      summary: Get Customer
+      description: Returns the details of a customer.
+      operationId: getCustomer
+      parameters:
+        - name: id
+          in: path
+          description: Resource's unique identification
+          required: true
+          schema:
+            minLength: 1
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer-output-detailed'
+              example:
+                completeName: RUI DIAS AFONSO
+                shortName: RUI AFONSO
+                nationalities:
+                  - PRT
+                  - BRA
+                birthDate: '2000-01-01T00:00:00.000Z'
+                id: 123456900
+                kind: api.customers.bancobpi.pt/customers
+                _links:
+                  self:
+                    href: 'https://api.customers.bancobpi.pt/customers/00123456900'
+                type: self-employed
+                accountReady: false
+                individualDetails:
+                  gender: female
+                  birthCountry: PRT
+                  profession: nurse
+                  professionalRole: quadro directivo
+                  birthDistrict: ''
+                  birthCounty: ''
+                  birthParish: ''
+                  maritalStatus: widowed
+                  marriageRegime: freely
+                  academicTitle: professor
+                  academicGrade: up to 9 year
+                  fatherName: Manuel Dias Afonso
+                  motherName: Rita Maria Afonso
+                  admissionDate: '2005-01-01T00:00:00.000Z'
+                  employerName: empresa dias
+                  activityCode: '23456'
+                selfEmployedDetails:
+                  professionalSituationEni: administrativo
+                  activityInitialDate: '2000-01-01T00:00:00.000Z'
+                  activityCountry: PRT
+                  circsActivityName: geologos
+                  website: www.diasedias.com
+                  bankOfPortugalSectorization: particular
+                  principalSourceIncome: dependent-employ
+        '400':
+          description: Bad request error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '403':
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '404':
+          description: Not found error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+      x-absis-operation:
+        type: informational
+        security: 934.getCustomer
+  /individuals:
+    post:
+      tags:
+        - customers
+      summary: Create Individual Customer
+      description: This method creates a new individual customer.
+      operationId: createIndividualCustomer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/individual-customer-input'
+        required: false
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/individual-customer-output-detailed'
+              example:
+                id: 1456987534
+                kind: api.customers.bancobpi.pt/customers
+                _links:
+                  self:
+                    href: 'https://api.customers.bancobpi.pt/customers/01456987534'
+                completeName: Maria Manuela Reis
+                shortName: Maria Reis
+                nationalities:
+                  - PRT
+                  - ESP
+                birthDate: '1996-11-04T00:00:00.000Z'
+                gender: female
+                birthCountry: PRT
+                profession: 'nurse '
+                professionalRole: quadro directivo
+                birthDistrict: SANTAREM
+                birthCounty: TOMAR
+                birthParish: TOMAR
+                maritalStatus: married
+                marriageRegime: general
+                academicTitle: nurse
+                academicGrade: bachalor degree
+                fatherName: Joaquim Ferreira Dias
+                motherName: Dulce Maria Dias
+                admissionDate: '2016-12-30T00:00:00.000Z'
+                employerName: Empresa Dias
+                activityCode: '2698'
+                accountReady: false
+        '400':
+          description: Bad request error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '403':
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+      x-absis-operation:
+        type: informational
+        security: 934.createIndividualCustomer
+      x-codegen-request-body-name: body
+  '/businesses/{id}':
+    put:
+      tags:
+        - customers
+      summary: Update Business Customer
+      description: This method allows to update any attribute of a business customer.
+      operationId: updateBusinessCustomer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/business-customer-input'
+        required: false
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/business-customer-output-detailed'
+              example:
+                id: 19633698
+                kind: api.customers.bancobpi.pt/customers/business/
+                _links:
+                  self:
+                    href: 'https://api.customers.bancobpi.pt/business/019633698'
+                legalName: EMPRESA TESTE
+                shortLegalName: Empresa lda
+                establishmentDate: '2000-01-01T00:00:00.000Z'
+                nationality: PRT
+                publicationDate: '2000-01-01T00:00:00.000Z'
+                journalOfRepublicPublicationNumber: '987344738'
+                economicActivityCode: '24000'
+                principalIndustry: ess
+                bankOfPortugalSectorization: BAMCOS CEN
+                legalNature: ASSOCIACAO
+                website: www.teste.com
+                registry: pariatu
+                conservatory: pariatu
+                socialCapital: '25000'
+                socialCapitalCurrency: EUR
+                headquartersCountryCode: PRT
+                accountReady: false
+        '400':
+          description: Bad request error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '403':
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+      x-absis-operation:
+        type: informational
+        security: 934.updateBusinessCustomer
+      x-codegen-request-body-name: body
+  '/entrepreneurs/{id}':
+    put:
+      tags:
+        - customers
+      summary: Update Entrepreneur Customer
+      description: Updates any attributes of an entrepreneur customer.
+      operationId: updateEntrepreneurCustomer
+      parameters:
+        - name: id
+          in: path
+          description: Resource's unique identification
+          required: true
+          schema:
+            minLength: 1
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/entrepreneur-customer-input'
+        required: false
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/entrepreneur-customer-output-detailed'
+              example:
+                id: 88888880010
+                kind: api.customers.bancobpi.pt/customers/entrepreneur
+                _links:
+                  self:
+                    href: 'https://api.customers.bancobpi.pt/customers/008888888'
+                comercialDesignation: Transportes Dias
+                shortComercialDesignation: Transportes LDA
+                professionalSituationEni: ENI
+                activityInitialDate: '2010-03-06T00:00:00.000Z'
+                economicActivityCode: '2541'
+                website: www.trasnportes.com
+                activityCountry: PRT
+                bankOfPortugalSectorization: particulares
+                legalNature: particular
+                circsActivityName: geologos
+                principalSourceIncome: eni/self-employ
+                accountReady: false
+        '400':
+          description: Bad request error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '403':
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+      x-absis-operation:
+        type: informational
+        security: 934.updateEntrepreneurCustomer
+      x-codegen-request-body-name: body
+  '/individuals/{id}':
+    put:
+      tags:
+        - customers
+      summary: Update Individual Customer
+      description: Updates any attributes of an individual customer.
+      operationId: updateIndividualCustomer
+      parameters:
+        - name: id
+          in: path
+          description: Resource's unique identification
+          required: true
+          schema:
+            minLength: 1
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/individual-customer-input'
+        required: false
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/individual-customer-output-detailed'
+              example:
+                id: 7892101045
+                kind: api.customers.bancobpi.pt/customers
+                _links:
+                  self:
+                    href: 'https://api.customers.bancobpi.pt/customers/07892101045'
+                completeName: Joao Anibal Silverio
+                gender: male
+                birthCountry: PRT
+                birthDate: '1997-01-19T00:00:00.000Z'
+                nationalities:
+                  - BRA
+                  - ESP
+                profession: biologist
+                professionalRole: administrativo
+                shortName: Joao Silverio
+                birthDistrict: ''
+                birthCounty: ''
+                birthParish: ''
+                maritalStatus: widowed
+                marriageRegime: separation-prop
+                academicTitle: architect
+                academicGrade: bachalor degree
+                fatherName: Raul Martins Fernandes
+                motherName: Rosa Isabela Fernandes
+                admissionDate: '2017-09-21T00:00:00.000Z'
+                employerName: MareMar
+                activityCode: '24000'
+                accountReady: true
+        '400':
+          description: Bad request error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '403':
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+      x-absis-operation:
+        type: informational
+        security: 934.updateIndividualCustomer
+      x-codegen-request-body-name: body
+  /businesses:
+    post:
+      tags:
+        - customers
+      summary: Create Business Customer
+      description: This method allows to create a new business customer.
+      operationId: createBusinessCustomer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/business-customer-input'
+        required: false
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/business-customer-output-detailed'
+              example:
+                id: 14584100859
+                kind: api.customers.bancobpi.pt/business/
+                _links:
+                  self:
+                    href: 'https://api.customers.bancobpi.pt/business/0014584100859'
+                legalName: EMPRESA TESTE
+                economicActivityCode: '24000'
+                bankOfPortugalSectorization: CONTR. CENRAIS
+                legalNature: EMPRESA PUBLICA
+                shortLegalName: NOME EMPRESA
+                establishmentDate: '2000-12-12T00:00:00.000Z'
+                publicationDate: '2000-12-12T00:00:00.000Z'
+                journalOfRepublicPublicationNumber: '758968'
+                principalIndustry: '012536'
+                website: www.teste.com
+                conservatory: ABRANTES
+                socialCapital: '25000'
+                socialCapitalCurrency: EUR
+                headquartersCountryCode: PRT
+                nationality: PRT
+                accountReady: true
+        '400':
+          description: Bad request error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '403':
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+      x-absis-operation:
+        type: informational
+        security: 934.createBusinessCustomer
+      x-codegen-request-body-name: body
+  '/customers/{customerId}/entrepreneurs':
+    post:
+      tags:
+        - customers
+      summary: Create Entrepreneur Customer
+      description: Creates a new entrepreneur customer.
+      operationId: createEntrepreneurCustomer
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer unique identifier
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/entrepreneur-customer-input'
+        required: false
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/entrepreneur-customer-output-detailed'
+              example:
+                id: 25820014796
+                kind: api.customers.bancobpi.pt/customers
+                _links:
+                  self:
+                    href: 'https://api.customers.bancobpi.pt/customers/025820014796'
+                comercialDesignation: Luz e filhos
+                shortComercialDesignation: 'Luz, lda'
+                professionalSituationEni: ENI
+                activityInitialDate: '1999-11-21T00:00:00.000Z'
+                economicActivityCode: '25896'
+                website: www.luzefilhos.com
+                activityCountry: PRT
+                bankOfPortugalSectorization: particulares
+                circsActivityName: ENGENHEIROS
+                legalNature: particular
+                principalSourceIncome: eni/dependent-employ
+                accountReady: false
+        '400':
+          description: Bad request error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '403':
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+      x-absis-operation:
+        type: informational
+        security: 934.createEntrepreneurCustomer
+      x-codegen-request-body-name: body
+  '/customers/{customerId}/self-employed':
+    post:
+      tags:
+        - customers
+      summary: Create Self-Employed Customer
+      description: Creates a new self-employed customer.
+      operationId: createSelfEmployedCustomer
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer unique identifier
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/self-employed-customer-input'
+        required: false
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/self-employed-customer-output-detailed'
+              example:
+                id: 456987456
+                kind: api.customers.bancobpi.pt/customers
+                _links:
+                  self:
+                    href: 'https://api.customers.bancobpi.pt/customers/000456987456'
+                professionalSituationEni: Profissional Liberal
+                activityInitialDate: '2001-03-03T00:00:00.000Z'
+                activityCountry: PRT
+                website: www.pneusrui.com
+                bankOfPortugalSectorization: particular
+                circsActivityName: geologos
+                principalSourceIncome: eni/dependent-employ
+                accountReady: true
+        '400':
+          description: Bad request error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '403':
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+      x-absis-operation:
+        type: informational
+        security: 934.createSelfEmployedCustomer
+      x-codegen-request-body-name: body
+  '/self-employed/{id}':
+    put:
+      tags:
+        - customers
+      summary: Update Self-Employed Customer
+      description: Updates any attributes of a self-employed customer.
+      operationId: updateSelfEmployedCustomer
+      parameters:
+        - name: id
+          in: path
+          description: Resource's unique identification
+          required: true
+          schema:
+            minLength: 1
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/self-employed-customer-input'
+        required: false
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/self-employed-customer-output-detailed'
+              example:
+                id: '158889996'
+                kind: api.customers.bancobpi.pt/customers
+                _links:
+                  self:
+                    href: 'https://api.customers.bancobpi.pt/customers/158889996'
+                professionalSituationEni: self-employed
+                activityInitialDate: '1998-10-06T00:00:00.000Z'
+                activityCountry: BRA
+                circsActivityName: geologos
+                website: www.geologia2.com
+                bankOfPortugalSectorization: particular
+                principalSourceIncome: self-employ/dependent-employ
+                accountReady: false
+        '400':
+          description: Bad request error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '403':
+          description: Forbidden error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/error'
+              example:
+                errors:
+                  - code: AAABBBCCC
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+                  - code: XXXYYYZZZ
+                    developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                    userMessage: ''
+                    moreInfo: 'More info about this error... '
+      x-absis-operation:
+        type: informational
+        security: 934.updateSelfEmployedCustomer
+      x-codegen-request-body-name: body
+  '/customers/{customerId}/individuals':
+    post:
+      tags:
+        - customers
+      summary: Revert customer to Individual
+      description: Reverts a self employed or a entrepreneur customer to a individual customer.
+      operationId: convertCustomerToIndividual
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer unique identifier
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/individual-customer-output-detailed'
+              example:
+                id: 1113658749
+                kind: api.customers.bancobpi.pt/customers
+                _links:
+                  self:
+                    href: 'https://api.customers.bancobpi.pt/customers/01113658749'
+                completeName: 'Rui Santos Lopes '
+                shortName: Rui Lopes
+                gender: male
+                birthCountry: PRT
+                birthDate: '1998-07-30T00:00:00.000Z'
+                nationalities:
+                  - PRT
+                  - ESP
+                profession: 'nurse '
+                professionalRole: quadro directivo
+                birthDistrict: ''
+                birthCounty: ''
+                birthParish: ''
+                maritalStatus: married
+                marriageRegime: general
+                academicTitle: nurse
+                academicGrade: bachalor degree
+                fatherName: Anibal Mestre Lopes
+                motherName: Rosario Maria Lopes
+                admissionDate: '2017-03-29T00:00:00.000Z'
+                employerName: 'peneus santos lda '
+                activityCode: '2963'
+                accountReady: true
+      x-absis-operation:
+        type: informational
+        security: 934.convertCustomerToIndividual
+components:
+  schemas:
+    error:
+      title: Error Model
+      required:
+        - code
+        - developerMessage
+      type: object
+      properties:
+        code:
+          type: string
+          description: Business error unique code
+        developerMessage:
+          type: string
+          description: 'Verbose, plain language description of the problem for the app developer with hints about how to fix it.'
+        userMessage:
+          type: string
+          description: Pass this message on to the app user if needed.
+        moreInfo:
+          type: string
+          description: URL to more description about the error.
+    customer-common:
+      title: Customer Common
+      required:
+        - birthDate
+        - completeName
+        - nationalities
+        - shortName
+      type: object
+      properties:
+        completeName:
+          type: string
+          description: Complete name of the customer. If the customer is a type of business this field will be the company name.
+        shortName:
+          type: string
+          description: 'Short name of the customer. '
+        nationalities:
+          maxItems: 4
+          uniqueItems: true
+          type: array
+          description: 'List of nationalities of the customer [Country ISO 3166 alpha 3 code](https://www.iso.org/iso-3166-country-codes.html)'
+          items:
+            maxLength: 3
+            minLength: 3
+            pattern: '^[A-Z]{3}'
+            type: string
+        birthDate:
+          type: string
+          description: 'Birth date of the customer (YYYY-MM-DD) [Date ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html)'
+          format: date
+      description: The properties that are shared amongst all versions of the Customer model.
+    customer-output:
+      title: Customer Output
+      description: The properties that are shared amongst all versions of the Customer model.
+      allOf:
+        - $ref: '#/components/schemas/common-body'
+        - $ref: '#/components/schemas/customer-common'
+        - type: object
+          properties:
+            type:
+              type: string
+              description: Activity type of the customer
+              enum:
+                - entrepreneur
+                - individual
+                - self-employed
+                - business
+            accountReady:
+              type: boolean
+              description: Indicates if the account is ready to use
+    customer-output-detailed:
+      title: Customer Output Detailed
+      description: The properties that are included when fetching a single Customer.
+      allOf:
+        - $ref: '#/components/schemas/customer-output'
+        - type: object
+          properties:
+            individualDetails:
+              $ref: '#/components/schemas/individual-customer-output'
+            businessDetails:
+              $ref: '#/components/schemas/business-customer-output'
+            entrepreneurDetails:
+              $ref: '#/components/schemas/entrepreneur-customer-output'
+            selfEmployedDetails:
+              $ref: '#/components/schemas/self-employed-customer-output'
+    individual-customer-common:
+      title: Individual Customer Common
+      required:
+        - birthCountry
+        - gender
+        - profession
+        - professionalRole
+      type: object
+      properties:
+        gender:
+          type: string
+          description: Gender of Customer
+          enum:
+            - female
+            - male
+        birthCountry:
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}'
+          type: string
+          description: 'Country Of Nationality [Country ISO 3166 alpha 3 code](https://www.iso.org/iso-3166-country-codes.html)'
+        birthDistrict:
+          maxLength: 16
+          type: string
+          description: District of birth of Customer
+        birthCounty:
+          maxLength: 16
+          type: string
+          description: City of birth
+        birthParish:
+          maxLength: 16
+          type: string
+          description: Birth Parish of Customer
+        maritalStatus:
+          type: string
+          description: Marital Status of Customer
+          enum:
+            - divorced
+            - domestic-partner
+            - married
+            - single
+            - widowed
+        marriageRegime:
+          type: string
+          description: Marriage Regime of Customer
+          enum:
+            - acquired
+            - freely
+            - general
+            - separation-prop
+        academicTitle:
+          maxLength: 16
+          type: string
+          description: Academic Title of Customer
+        academicGrade:
+          maxLength: 16
+          type: string
+          description: Academic Grade of Customer
+        fatherName:
+          maxLength: 60
+          type: string
+          description: Father Name
+        motherName:
+          maxLength: 60
+          type: string
+          description: Mother Name
+        profession:
+          maxLength: 16
+          type: string
+          description: Profession of Customer
+        professionalRole:
+          maxLength: 16
+          type: string
+          description: Professional Role of Customer
+        admissionDate:
+          type: string
+          description: 'Admission Date of Customer (YYYY-MM-DD) [Date ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html)'
+          format: date
+        employerName:
+          maxLength: 40
+          type: string
+          description: Employer's name
+        activityCode:
+          maxLength: 4
+          type: string
+          description: Activity Code of Company
+      description: Properties of the individual customer model.
+    business-customer-common:
+      title: Business Customer Common
+      required:
+        - bankOfPortugalSectorization
+        - economicActivityCode
+        - legalName
+        - legalNature
+      type: object
+      properties:
+        legalName:
+          maxLength: 150
+          type: string
+          description: Legal Name of the Company
+        shortLegalName:
+          maxLength: 40
+          type: string
+          description: Short Legal Name of the Company
+        establishmentDate:
+          type: string
+          description: 'Incorporation Date (YYYY-MM-DD) [Date ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html)'
+          format: date
+        publicationDate:
+          type: string
+          description: 'Date of Incorporation (YYYY-MM-DD) [Date ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html)'
+          format: date
+        journalOfRepublicPublicationNumber:
+          maxLength: 10
+          type: string
+          description: Publication number on Journal of the Republic
+        economicActivityCode:
+          maxLength: 16
+          type: string
+          description: 'Sector of Economic Activity. [National Statistics Institute Code List](https://www.ine.pt/ine_novidades/semin/cae/CAE_REV_3.pdf)'
+        principalIndustry:
+          maxLength: 16
+          type: string
+          description: Principal branch of activity
+        bankOfPortugalSectorization:
+          maxLength: 16
+          type: string
+          description: Bank of Portugal Sectorization code
+        legalNature:
+          maxLength: 16
+          type: string
+          description: Presents the structure and company's operating mode.
+        website:
+          maxLength: 50
+          type: string
+          description: Company website
+        registry:
+          maxLength: 20
+          type: string
+          description: Location of the Notary
+        conservatory:
+          maxLength: 16
+          type: string
+          description: Number of Conservatory
+        socialCapital:
+          maxLength: 18
+          minLength: 1
+          type: string
+          description: Value of the social capital
+        socialCapitalCurrency:
+          maxLength: 3
+          minLength: 3
+          pattern: '[A-Z]{3}'
+          type: string
+          description: 'Currency of the social capital value. [Currency ISO 4217](https://www.iso.org/iso-4217-currency-codes.html)'
+        headquartersCountryCode:
+          maxLength: 3
+          minLength: 3
+          pattern: '[A-Z]{3}'
+          type: string
+          description: 'Headquarters country code [Country Codes - ISO 3166](https://www.iso.org/iso-3166-country-codes.html)'
+      description: The properties that are shared amongst all versions of the Business Customer model.
+    business-customer-input:
+      title: Business Customer Input
+      description: The properties that are allowed when creating or updating a Business Customer.
+      allOf:
+        - $ref: '#/components/schemas/business-customer-common'
+        - type: object
+          properties:
+            nationality:
+              maxLength: 3
+              minLength: 3
+              pattern: '[A-Z]{3}'
+              type: string
+              description: 'Nationality of the company [Country Codes - ISO 3166](https://www.iso.org/iso-3166-country-codes.html)'
+    business-customer-output:
+      title: Business Customer Output
+      description: The properties that are included when fetching a list of Customers.
+      allOf:
+        - $ref: '#/components/schemas/business-customer-common'
+    business-customer-output-detailed:
+      title: Business Customer Output Detailed
+      description: The properties that are included when fetching a single Business Customer.
+      allOf:
+        - $ref: '#/components/schemas/common-body'
+        - $ref: '#/components/schemas/business-customer-output'
+        - type: object
+          properties:
+            nationality:
+              maxLength: 3
+              minLength: 3
+              pattern: '[A-Z]{3}'
+              type: string
+              description: 'Nationality of the company [Country Codes - ISO 3166](https://www.iso.org/iso-3166-country-codes.html)'
+            accountReady:
+              type: boolean
+              description: Indicates if the account is ready to use
+    entrepreneur-customer-common:
+      title: Entrepreneur Customer Common
+      required:
+        - activityCountry
+        - activityInitialDate
+        - circsActivityName
+        - comercialDesignation
+        - professionalSituationEni
+      type: object
+      properties:
+        comercialDesignation:
+          maxLength: 150
+          type: string
+          description: Entrepreneur's comercial designation
+        shortComercialDesignation:
+          maxLength: 40
+          type: string
+          description: Entrepreneur's short comercial designation
+        professionalSituationEni:
+          type: string
+          description: Professional Status as an Entrepreneur in Individual Name
+        activityInitialDate:
+          type: string
+          description: 'Activity start date (YYYY-MM-DD) [Date ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html)'
+          format: date
+        economicActivityCode:
+          maxLength: 16
+          type: string
+          description: 'Sector of Economic Activity. [National Statistics Institute Code List](https://www.ine.pt/ine_novidades/semin/cae/CAE_REV_3.pdf)'
+        website:
+          maxLength: 50
+          type: string
+          description: Company website
+        activityCountry:
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}'
+          type: string
+          description: 'Activity country [Country ISO 3166 alpha 3 code](https://www.iso.org/iso-3166-country-codes.html)'
+        bankOfPortugalSectorization:
+          maxLength: 16
+          type: string
+          description: Bank of Portugal Sectorisation
+        legalNature:
+          maxLength: 16
+          type: string
+          description: Presents the structure and company's operating mode
+        circsActivityName:
+          maxLength: 16
+          type: string
+          description: Indicates the type of activity
+        principalSourceIncome:
+          type: string
+          description: Indicates the source of most income
+          enum:
+            - dependent-employ
+            - eni/self-employ
+      description: The properties that are shared amongst all versions of the Entrepreneur Customer model.
+    entrepreneur-customer-input:
+      title: Entrepreneur Customer Input
+      description: The properties that are allowed when creating or updating a Entrepreneur Customer.
+      allOf:
+        - $ref: '#/components/schemas/entrepreneur-customer-common'
+    entrepreneur-customer-output:
+      title: Entrepreneur Customer Output
+      description: The properties that are included when fetching a list of Customers.
+      allOf:
+        - $ref: '#/components/schemas/entrepreneur-customer-common'
+    entrepreneur-customer-output-detailed:
+      title: Entrepreneur Customer Output Detailed
+      description: The properties that are included when fetching a single Entrepreneur Customer.
+      allOf:
+        - $ref: '#/components/schemas/common-body'
+        - $ref: '#/components/schemas/entrepreneur-customer-output'
+        - type: object
+          properties:
+            accountReady:
+              type: boolean
+              description: Indicates if the account is ready to use
+    self-employed-customer-common:
+      title: Self Employed Customer Common
+      required:
+        - activityCountry
+        - activityInitialDate
+        - circsActivityName
+        - professionalSituationEni
+      type: object
+      properties:
+        professionalSituationEni:
+          maxLength: 16
+          type: string
+          description: Professional Status as an Entrepreneur in Individual Name
+        activityInitialDate:
+          type: string
+          description: 'Activity start date (YYYY-MM-DD) [Date ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html)'
+          format: date
+        website:
+          maxLength: 50
+          type: string
+          description: 'Company website '
+        activityCountry:
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}'
+          type: string
+          description: 'Activity Country [Country ISO 3166 alpha 3 code](https://www.iso.org/iso-3166-country-codes.html)'
+        bankOfPortugalSectorization:
+          maxLength: 16
+          type: string
+          description: Bank of Portugal Sectorisation
+        circsActivityName:
+          maxLength: 16
+          type: string
+          description: Indicates the type of activity
+        principalSourceIncome:
+          type: string
+          description: Indicates the source of most income
+          enum:
+            - dependent-employ
+            - eni/self-employ
+      description: The properties that are shared amongst all versions of the Self Employed Customer model.
+    self-employed-customer-input:
+      title: Self Employed Customer Input
+      description: The properties that are allowed when creating or updating a Customer.
+      allOf:
+        - $ref: '#/components/schemas/self-employed-customer-common'
+    self-employed-customer-output:
+      title: Self Employed Customer Output
+      description: The properties that are included when fetching a list of Customers.
+      allOf:
+        - $ref: '#/components/schemas/self-employed-customer-common'
+    self-employed-customer-output-detailed:
+      title: Self Employed Customer Output Detailed
+      description: The properties that are included when fetching a single Self-Employed Customer.
+      allOf:
+        - $ref: '#/components/schemas/common-body'
+        - $ref: '#/components/schemas/self-employed-customer-output'
+        - type: object
+          properties:
+            accountReady:
+              type: boolean
+              description: Indicates if the account is ready to use
+    individual-customer-input:
+      title: Individual Customer Input
+      description: The properties that are allowed when creating or updating a Individual Customer.
+      allOf:
+        - $ref: '#/components/schemas/customer-common'
+        - $ref: '#/components/schemas/individual-customer-common'
+    individual-customer-output:
+      title: Individual Customer Output
+      description: The properties that are included when fetching a list of Customers.
+      allOf:
+        - $ref: '#/components/schemas/individual-customer-common'
+    individual-customer-output-detailed:
+      title: Individual Customer Output Detailed
+      description: The properties that are included when fetching a single Individual Customer.
+      allOf:
+        - $ref: '#/components/schemas/common-body'
+        - $ref: '#/components/schemas/customer-common'
+        - $ref: '#/components/schemas/individual-customer-common'
+        - type: object
+          properties:
+            accountReady:
+              type: boolean
+    customer-output-paginated:
+      title: Customer Output Paginated
+      description: The properties that are included when fetching a paginated list of Customer.
+      allOf:
+        - type: object
+          properties:
+            customer:
+              type: array
+              items:
+                $ref: '#/components/schemas/customer-output'
+        - $ref: '#/components/schemas/pagination-body'
+    common-body:
+      title: Common Body
+      type: object
+      properties:
+        id:
+          type: string
+          description: Resource's unique identification
+        kind:
+          type: string
+          description: 'Resource full name. <br/>For example: api-name.bancobpi.pt/version/resource-name'
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/links'
+          description: Links area
+      description: The common properties that are shared with all models.
+    links:
+      title: Link Body
+      type: object
+      properties:
+        href:
+          type: string
+    pagination-body:
+      title: Pagination Body
+      type: object
+      properties:
+        totalItems:
+          minimum: 0
+          type: integer
+          description: The total items result
+        currentPage:
+          minimum: 0
+          type: integer
+          description: The current page
+        totalPages:
+          minimum: 0
+          type: integer
+          description: The total pages result
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/links'
+            next:
+              $ref: '#/components/schemas/links'
+            prev:
+              $ref: '#/components/schemas/links'
+          description: Links area
+      description: Pagination links section
+  responses:
+    general-error-400:
+      description: Bad request error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: '#/components/schemas/error'
+          example:
+            errors:
+              - code: AAABBBCCC
+                developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                userMessage: ''
+                moreInfo: 'More info about this error... '
+              - code: XXXYYYZZZ
+                developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                userMessage: ''
+                moreInfo: 'More info about this error... '
+    general-error-401:
+      description: Unauthorized error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: '#/components/schemas/error'
+          example:
+            errors:
+              - code: AAABBBCCC
+                developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                userMessage: ''
+                moreInfo: 'More info about this error... '
+              - code: XXXYYYZZZ
+                developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                userMessage: ''
+                moreInfo: 'More info about this error... '
+    general-error-403:
+      description: Forbidden error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: '#/components/schemas/error'
+          example:
+            errors:
+              - code: AAABBBCCC
+                developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                userMessage: ''
+                moreInfo: 'More info about this error... '
+              - code: XXXYYYZZZ
+                developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                userMessage: ''
+                moreInfo: 'More info about this error... '
+    general-error-404:
+      description: Not found error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: '#/components/schemas/error'
+          example:
+            errors:
+              - code: AAABBBCCC
+                developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                userMessage: ''
+                moreInfo: 'More info about this error... '
+              - code: XXXYYYZZZ
+                developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                userMessage: ''
+                moreInfo: 'More info about this error... '
+    general-error-500:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: '#/components/schemas/error'
+          example:
+            errors:
+              - code: AAABBBCCC
+                developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                userMessage: ''
+                moreInfo: 'More info about this error... '
+              - code: XXXYYYZZZ
+                developerMessage: 'There was a validation error. The following field is invalid: fieldNameHere'
+                userMessage: ''
+                moreInfo: 'More info about this error... '
+    general-info-204:
+      description: No content
+      content: {}
