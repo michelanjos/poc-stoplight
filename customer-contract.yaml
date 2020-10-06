@@ -6,8 +6,7 @@ info:
     email: mail@bancobpi.pt
   version: '1.0'
 servers:
-  - url: 'http://example.com'
-  - url: 'https://example.com'
+  - url: 'http://127.0.0.1:3100'
 tags:
   - name: customers
 paths:
@@ -89,7 +88,7 @@ paths:
                       - PRT
                       - BRA
                     birthDate: '1999-01-01'
-                    id: "123456900"
+                    id: '123456900'
                     kind: api.customers.bancobpi.pt/customers
                     _links:
                       self:
@@ -102,7 +101,7 @@ paths:
                       - PRT
                       - BRA
                     birthDate: '2001-01-01'
-                    id: "123588786"
+                    id: '123588786'
                     kind: api.customers.bancobpi.pt/customers
                     _links:
                       self:
@@ -132,7 +131,7 @@ paths:
                       - PRT
                       - BRA
                     birthDate: '1999-01-01'
-                    id: "123456900"
+                    id: '123456900'
                     kind: api.customers.bancobpi.pt/customers
                     _links:
                       self:
@@ -145,7 +144,7 @@ paths:
                       - PRT
                       - BRA
                     birthDate: '2001-01-01'
-                    id: "123588786"
+                    id: '123588786'
                     kind: api.customers.bancobpi.pt/customers
                     _links:
                       self:
@@ -257,7 +256,7 @@ paths:
                   - PRT
                   - BRA
                 birthDate: '2000-01-01'
-                id: "123456900"
+                id: '123456900'
                 kind: api.customers.bancobpi.pt/customers
                 _links:
                   self:
@@ -397,7 +396,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/individual-customer-output-detailed'
               example:
-                id: "1456987534"
+                id: '1456987534'
                 kind: api.customers.bancobpi.pt/customers
                 _links:
                   self:
@@ -519,7 +518,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/business-customer-output-detailed'
               example:
-                id: "19633698"
+                id: '19633698'
                 kind: api.customers.bancobpi.pt/customers/business/
                 _links:
                   self:
@@ -637,7 +636,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/entrepreneur-customer-output-detailed'
               example:
-                id: "88888880010"
+                id: '88888880010'
                 kind: api.customers.bancobpi.pt/customers/entrepreneur
                 _links:
                   self:
@@ -750,7 +749,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/individual-customer-output-detailed'
               example:
-                id: "7892101045"
+                id: '7892101045'
                 kind: api.customers.bancobpi.pt/customers
                 _links:
                   self:
@@ -866,7 +865,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/business-customer-output-detailed'
               example:
-                id: "14584100859"
+                id: '14584100859'
                 kind: api.customers.bancobpi.pt/business/
                 _links:
                   self:
@@ -982,7 +981,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/entrepreneur-customer-output-detailed'
               example:
-                id: "25820014796"
+                id: '25820014796'
                 kind: api.customers.bancobpi.pt/customers
                 _links:
                   self:
@@ -997,7 +996,7 @@ paths:
                 bankOfPortugalSectorization: particulares
                 circsActivityName: ENGENHEIROS
                 legalNature: particular
-                principalSourceIncome: "eni/self-employ"
+                principalSourceIncome: eni/self-employ
                 accountReady: false
         '400':
           description: Bad request error
@@ -1094,12 +1093,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/self-employed-customer-output-detailed'
               example:
-                id: "456987456"
+                id: '456987456'
                 kind: api.customers.bancobpi.pt/customers
                 _links:
                   self:
                     href: 'https://api.customers.bancobpi.pt/customers/000456987456'
-                professionalSituationEni: "Profissional"
+                professionalSituationEni: Profissional
                 activityInitialDate: '2001-03-03'
                 activityCountry: PRT
                 website: www.pneusrui.com
@@ -1305,7 +1304,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/individual-customer-output-detailed'
               example:
-                id: "1113658749"
+                id: '1113658749'
                 kind: api.customers.bancobpi.pt/customers
                 _links:
                   self:
