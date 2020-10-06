@@ -1405,6 +1405,9 @@ components:
             accountReady:
               type: boolean
               description: Indicates if the account is ready to use
+            test:
+              $ref: 'https://next-api.stoplight.io/files.export?projectId=25189&branch=version%2F1.0&path=CommonLibrary.oas2.yml#/definitions/common-body'
+      x-examples: {}
     customer-output-detailed:
       title: Customer Output Detailed
       description: The properties that are included when fetching a single Customer.
