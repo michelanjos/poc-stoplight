@@ -6,8 +6,8 @@ info:
     email: mail@bancobpi.pt
   version: '1.0'
 servers:
-  - url: 'http://example.com/'
-  - url: 'https://example.com/'
+  - url: 'http://example.com'
+  - url: 'https://example.com'
 tags:
   - name: customers
 paths:
@@ -88,8 +88,8 @@ paths:
                     nationalities:
                       - PRT
                       - BRA
-                    birthDate: '1999-01-01T00:00:00.000Z'
-                    id: 123456900
+                    birthDate: '1999-01-01'
+                    id: "123456900"
                     kind: api.customers.bancobpi.pt/customers
                     _links:
                       self:
@@ -101,8 +101,8 @@ paths:
                     nationalities:
                       - PRT
                       - BRA
-                    birthDate: '2001-01-01T00:00:00.000Z'
-                    id: 123588786
+                    birthDate: '2001-01-01'
+                    id: "123588786"
                     kind: api.customers.bancobpi.pt/customers
                     _links:
                       self:
@@ -115,32 +115,6 @@ paths:
                 _links:
                   self:
                     href: 'https://api.customers.bancobpi.pt/customers?customerType=business'
-              examples:
-                example-1:
-                  value:
-                    customer:
-                      - id: string
-                        kind: string
-                        _links:
-                          self:
-                            href: string
-                        completeName: string
-                        shortName: string
-                        nationalities:
-                          - str
-                        birthDate: '2019-08-24'
-                        type: entrepreneur
-                        accountReady: true
-                    totalItems: 0
-                    currentPage: 0
-                    totalPages: 0
-                    _links:
-                      self:
-                        href: string
-                      next:
-                        href: string
-                      prev:
-                        href: string
         '204':
           description: No content
           content: {}
@@ -157,8 +131,8 @@ paths:
                     nationalities:
                       - PRT
                       - BRA
-                    birthDate: '1999-01-01T00:00:00.000Z'
-                    id: 123456900
+                    birthDate: '1999-01-01'
+                    id: "123456900"
                     kind: api.customers.bancobpi.pt/customers
                     _links:
                       self:
@@ -170,8 +144,8 @@ paths:
                     nationalities:
                       - PRT
                       - BRA
-                    birthDate: '2001-01-01T00:00:00.000Z'
-                    id: 123588786
+                    birthDate: '2001-01-01'
+                    id: "123588786"
                     kind: api.customers.bancobpi.pt/customers
                     _links:
                       self:
@@ -282,8 +256,8 @@ paths:
                 nationalities:
                   - PRT
                   - BRA
-                birthDate: '2000-01-01T00:00:00.000Z'
-                id: 123456900
+                birthDate: '2000-01-01'
+                id: "123456900"
                 kind: api.customers.bancobpi.pt/customers
                 _links:
                   self:
@@ -304,12 +278,12 @@ paths:
                   academicGrade: up to 9 year
                   fatherName: Manuel Dias Afonso
                   motherName: Rita Maria Afonso
-                  admissionDate: '2005-01-01T00:00:00.000Z'
+                  admissionDate: '2005-01-01'
                   employerName: empresa dias
-                  activityCode: '23456'
+                  activityCode: '2345'
                 selfEmployedDetails:
                   professionalSituationEni: administrativo
-                  activityInitialDate: '2000-01-01T00:00:00.000Z'
+                  activityInitialDate: '2000-01-01'
                   activityCountry: PRT
                   circsActivityName: geologos
                   website: www.diasedias.com
@@ -423,7 +397,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/individual-customer-output-detailed'
               example:
-                id: 1456987534
+                id: "1456987534"
                 kind: api.customers.bancobpi.pt/customers
                 _links:
                   self:
@@ -433,7 +407,7 @@ paths:
                 nationalities:
                   - PRT
                   - ESP
-                birthDate: '1996-11-04T00:00:00.000Z'
+                birthDate: '1996-11-04'
                 gender: female
                 birthCountry: PRT
                 profession: 'nurse '
@@ -447,7 +421,7 @@ paths:
                 academicGrade: bachalor degree
                 fatherName: Joaquim Ferreira Dias
                 motherName: Dulce Maria Dias
-                admissionDate: '2016-12-30T00:00:00.000Z'
+                admissionDate: '2016-12-30'
                 employerName: Empresa Dias
                 activityCode: '2698'
                 accountReady: false
@@ -545,16 +519,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/business-customer-output-detailed'
               example:
-                id: 19633698
+                id: "19633698"
                 kind: api.customers.bancobpi.pt/customers/business/
                 _links:
                   self:
                     href: 'https://api.customers.bancobpi.pt/business/019633698'
                 legalName: EMPRESA TESTE
                 shortLegalName: Empresa lda
-                establishmentDate: '2000-01-01T00:00:00.000Z'
+                establishmentDate: '2000-01-01'
                 nationality: PRT
-                publicationDate: '2000-01-01T00:00:00.000Z'
+                publicationDate: '2000-01-01'
                 journalOfRepublicPublicationNumber: '987344738'
                 economicActivityCode: '24000'
                 principalIndustry: ess
@@ -663,7 +637,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/entrepreneur-customer-output-detailed'
               example:
-                id: 88888880010
+                id: "88888880010"
                 kind: api.customers.bancobpi.pt/customers/entrepreneur
                 _links:
                   self:
@@ -671,7 +645,7 @@ paths:
                 comercialDesignation: Transportes Dias
                 shortComercialDesignation: Transportes LDA
                 professionalSituationEni: ENI
-                activityInitialDate: '2010-03-06T00:00:00.000Z'
+                activityInitialDate: '2010-03-06'
                 economicActivityCode: '2541'
                 website: www.trasnportes.com
                 activityCountry: PRT
@@ -776,7 +750,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/individual-customer-output-detailed'
               example:
-                id: 7892101045
+                id: "7892101045"
                 kind: api.customers.bancobpi.pt/customers
                 _links:
                   self:
@@ -784,7 +758,7 @@ paths:
                 completeName: Joao Anibal Silverio
                 gender: male
                 birthCountry: PRT
-                birthDate: '1997-01-19T00:00:00.000Z'
+                birthDate: '1997-01-19'
                 nationalities:
                   - BRA
                   - ESP
@@ -800,9 +774,9 @@ paths:
                 academicGrade: bachalor degree
                 fatherName: Raul Martins Fernandes
                 motherName: Rosa Isabela Fernandes
-                admissionDate: '2017-09-21T00:00:00.000Z'
+                admissionDate: '2017-09-21'
                 employerName: MareMar
-                activityCode: '24000'
+                activityCode: '2400'
                 accountReady: true
         '400':
           description: Bad request error
@@ -892,7 +866,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/business-customer-output-detailed'
               example:
-                id: 14584100859
+                id: "14584100859"
                 kind: api.customers.bancobpi.pt/business/
                 _links:
                   self:
@@ -902,8 +876,8 @@ paths:
                 bankOfPortugalSectorization: CONTR. CENRAIS
                 legalNature: EMPRESA PUBLICA
                 shortLegalName: NOME EMPRESA
-                establishmentDate: '2000-12-12T00:00:00.000Z'
-                publicationDate: '2000-12-12T00:00:00.000Z'
+                establishmentDate: '2000-12-12'
+                publicationDate: '2000-12-12'
                 journalOfRepublicPublicationNumber: '758968'
                 principalIndustry: '012536'
                 website: www.teste.com
@@ -1008,7 +982,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/entrepreneur-customer-output-detailed'
               example:
-                id: 25820014796
+                id: "25820014796"
                 kind: api.customers.bancobpi.pt/customers
                 _links:
                   self:
@@ -1016,14 +990,14 @@ paths:
                 comercialDesignation: Luz e filhos
                 shortComercialDesignation: 'Luz, lda'
                 professionalSituationEni: ENI
-                activityInitialDate: '1999-11-21T00:00:00.000Z'
+                activityInitialDate: '1999-11-21'
                 economicActivityCode: '25896'
                 website: www.luzefilhos.com
                 activityCountry: PRT
                 bankOfPortugalSectorization: particulares
                 circsActivityName: ENGENHEIROS
                 legalNature: particular
-                principalSourceIncome: eni/dependent-employ
+                principalSourceIncome: "eni/self-employ"
                 accountReady: false
         '400':
           description: Bad request error
@@ -1120,18 +1094,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/self-employed-customer-output-detailed'
               example:
-                id: 456987456
+                id: "456987456"
                 kind: api.customers.bancobpi.pt/customers
                 _links:
                   self:
                     href: 'https://api.customers.bancobpi.pt/customers/000456987456'
-                professionalSituationEni: Profissional Liberal
-                activityInitialDate: '2001-03-03T00:00:00.000Z'
+                professionalSituationEni: "Profissional"
+                activityInitialDate: '2001-03-03'
                 activityCountry: PRT
                 website: www.pneusrui.com
                 bankOfPortugalSectorization: particular
                 circsActivityName: geologos
-                principalSourceIncome: eni/dependent-employ
+                principalSourceIncome: eni/self-employ
                 accountReady: true
         '400':
           description: Bad request error
@@ -1235,12 +1209,12 @@ paths:
                   self:
                     href: 'https://api.customers.bancobpi.pt/customers/158889996'
                 professionalSituationEni: self-employed
-                activityInitialDate: '1998-10-06T00:00:00.000Z'
+                activityInitialDate: '1998-10-06'
                 activityCountry: BRA
                 circsActivityName: geologos
                 website: www.geologia2.com
                 bankOfPortugalSectorization: particular
-                principalSourceIncome: self-employ/dependent-employ
+                principalSourceIncome: dependent-employ
                 accountReady: false
         '400':
           description: Bad request error
@@ -1331,7 +1305,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/individual-customer-output-detailed'
               example:
-                id: 1113658749
+                id: "1113658749"
                 kind: api.customers.bancobpi.pt/customers
                 _links:
                   self:
@@ -1340,7 +1314,7 @@ paths:
                 shortName: Rui Lopes
                 gender: male
                 birthCountry: PRT
-                birthDate: '1998-07-30T00:00:00.000Z'
+                birthDate: '1998-07-30'
                 nationalities:
                   - PRT
                   - ESP
@@ -1355,7 +1329,7 @@ paths:
                 academicGrade: bachalor degree
                 fatherName: Anibal Mestre Lopes
                 motherName: Rosario Maria Lopes
-                admissionDate: '2017-03-29T00:00:00.000Z'
+                admissionDate: '2017-03-29'
                 employerName: 'peneus santos lda '
                 activityCode: '2963'
                 accountReady: true
